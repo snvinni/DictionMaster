@@ -1,4 +1,4 @@
-package com.example.dictionmaster
+package com.example.dictionmaster.feature.initialloading
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -24,9 +24,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.dictionmaster.ui.theme.DarkBlue
-import com.example.dictionmaster.ui.theme.DictionMasterTheme
-import com.example.dictionmaster.ui.theme.Typography
+import com.example.dictionmaster.R
+import com.example.dictionmaster.core.ui.theme.DarkBlue
+import com.example.dictionmaster.core.ui.theme.DictionMasterTheme
+import com.example.dictionmaster.core.ui.theme.Typography
 
 @Composable
 fun InitialLoadingScreen() {
