@@ -13,18 +13,22 @@ val RobotoCondensedFamily = FontFamily(
     Font(R.font.roboto_condensed_bold, FontWeight.Bold),
 )
 val Typography = Typography(
-    bodyLarge = TextStyle(
+    bodySmall = TextStyle(
         fontFamily = RobotoCondensedFamily,
         fontWeight = FontWeight.Light,
         fontSize = 16.sp,
         lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
     ),
     bodyMedium = TextStyle(
         fontFamily = RobotoCondensedFamily,
         fontWeight = FontWeight.Light,
+        fontSize = 18.sp,
+        lineHeight = 24.sp,
+    ),
+    bodyLarge = TextStyle(
+        fontFamily = RobotoCondensedFamily,
+        fontWeight = FontWeight.Light,
         fontSize = 22.sp,
         lineHeight = 20.sp,
-        letterSpacing = 0.25.sp
     ),
 )
