@@ -1,4 +1,4 @@
-package com.example.dictionmaster.feature.initialloading
+package com.example.dictionmaster.feature.splash
 
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,9 +29,18 @@ import com.example.dictionmaster.R
 import com.example.dictionmaster.core.ui.theme.DarkBlue
 import com.example.dictionmaster.core.ui.theme.DictionMasterTheme
 import com.example.dictionmaster.core.ui.theme.Typography
+import kotlinx.coroutines.delay
 
 @Composable
-fun InitialLoadingScreen() {
+fun SplashScreen(
+    startActivity: () -> Unit
+) {
+
+    LaunchedEffect(true) {
+        delay(2000)
+        startActivity()
+    }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
     ) {
@@ -45,7 +55,7 @@ fun InitialLoadingScreen() {
 
             Text(
                 text = "by Vinicius",
-                style = Typography.bodyMedium,
+                style = Typography.bodyLarge,
                 modifier = Modifier
                     .padding(bottom = 41.dp)
                     .align(Alignment.BottomCenter),
@@ -95,6 +105,8 @@ private fun InitialLoadingIcon(
 @Composable
 fun InitialLoadingScreenPreview() {
     DictionMasterTheme {
-        InitialLoadingScreen()
+        SplashScreen(
+            startActivity = {}
+        )
     }
 }
