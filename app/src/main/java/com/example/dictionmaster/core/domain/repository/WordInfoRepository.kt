@@ -6,5 +6,5 @@ import com.example.dictionmaster.core.domain.util.Resource
 interface WordInfoRepository {
     suspend fun getWordInfo(
         word: String
-    ): Resource.Result<WordInfo, Exception>
+    ): Resource.Result<WordInfo, Throwable>
 }

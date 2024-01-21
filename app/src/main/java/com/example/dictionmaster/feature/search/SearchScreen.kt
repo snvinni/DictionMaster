@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.example.dictionmaster.R
 import com.example.dictionmaster.core.ui.component.ObserverWithLifecycle
 import com.example.dictionmaster.core.ui.theme.Blue
@@ -46,27 +47,29 @@ import com.example.dictionmaster.core.ui.theme.Typography
 
 @Composable
 fun SearchRoute(
-    viewModel: SearchViewModel = hiltViewModel()
+    viewModel: SearchViewModel = hiltViewModel(),
+    navController: NavController,
+    onNavigateToWordInfo: (String) -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val isLoading = remember { mutableStateOf(false) }
 
-    ObserverWithLifecycle(viewModel.uiState) {
-        when (it) {
+    ObserverWithLifecycle(viewModel.uiState) { uiState ->
+        when (uiState) {
             UiState.Loading -> {
                 isLoading.value = true
             }
 
             is UiState.Success -> {
-
+                onNavigateToWordInfo(uiState.wordInfo.word)
             }
 
             else -> {
                 isLoading.value = false
 
-                if (it is UiState.Error) {
+                if (uiState is UiState.Error) {
                     snackbarHostState.showSnackbar(
-                        message = it.message,
+                        message = uiState.message,
                     )
                 }
             }

@@ -8,5 +8,5 @@ interface WordInfoService {
     @GET("entries/en/{word}")
     suspend fun getWordInfo(
         @Path("word") word: String
-    ): WordInfoResponse
+    ): List<WordInfoResponse>
 }

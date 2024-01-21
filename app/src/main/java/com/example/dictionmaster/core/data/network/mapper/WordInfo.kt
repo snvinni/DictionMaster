@@ -17,7 +17,7 @@ fun WordInfoResponse.toModel() = WordInfo(
             definitions = meaning.definitions.map { definition ->
                 WordInfo.Meaning.Definition(
                     definition = definition.definition,
-                    example = definition.example,
+                    example = definition.example ?: "",
                 )
             }
         )

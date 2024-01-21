@@ -10,13 +10,13 @@ import javax.inject.Inject
 class WordInfoRepositoryImpl @Inject constructor(
     private val service: WordInfoService
 ) : WordInfoRepository {
-    override suspend fun getWordInfo(word: String): Resource.Result<WordInfo, Exception> {
+    override suspend fun getWordInfo(word: String): Resource.Result<WordInfo, Throwable> {
         return runCatching {
             val responseData = service.getWordInfo(word)
 
-            Resource.Result.Success(responseData.toModel())
+            Resource.Result.Success(responseData.first().toModel())
         }.getOrElse {
-            Resource.Result.Error(Exception())
+            Resource.Result.Error(it)
         }
     }
 }

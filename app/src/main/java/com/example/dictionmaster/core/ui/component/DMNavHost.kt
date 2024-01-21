@@ -3,6 +3,8 @@ package com.example.dictionmaster.core.ui.component
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.navigation.NamedNavArgument
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,16 +12,17 @@ import androidx.navigation.compose.composable
 @Composable
 fun DMNavHost(
     navController: NavHostController,
-    starDestination: String,
+    startDestination: String,
     navHostConfig: List<NavHostConfig>,
 ) {
     NavHost(
         navController = navController,
-        startDestination = starDestination,
+        startDestination = startDestination,
     ) {
         navHostConfig.onEach { config ->
             composable(
                 route = config.route,
+                arguments = config.arguments,
                 enterTransition = {
                     slideIntoContainer(
                         towards = AnimatedContentTransitionScope.SlideDirection.Companion.Left,
@@ -45,7 +48,11 @@ fun DMNavHost(
                     )
                 }
             ) {
-                config.screenDestination()
+                val word = remember {
+                    it.arguments?.getString("word")
+                }
+
+                config.screenDestination(word)
             }
         }
 
@@ -54,5 +61,6 @@ fun DMNavHost(
 
 data class NavHostConfig(
     val route: String,
-    val screenDestination: @Composable () -> Unit
+    val screenDestination: @Composable (String?) -> Unit,
+    val arguments: List<NamedNavArgument> = emptyList(),
 )

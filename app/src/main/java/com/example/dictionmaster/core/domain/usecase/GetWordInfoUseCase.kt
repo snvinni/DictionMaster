@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetWordInfoUseCase @Inject constructor(
     private val repository: WordInfoRepository
 ) {
-    suspend operator fun invoke(word: String): Resource.Result<WordInfo, Exception> {
+    suspend operator fun invoke(word: String): Resource.Result<WordInfo, Throwable> {
         return when (val response = repository.getWordInfo(word)) {
             is Resource.Result.Error -> response
 
