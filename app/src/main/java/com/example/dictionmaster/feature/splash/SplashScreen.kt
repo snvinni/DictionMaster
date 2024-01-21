@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import com.example.dictionmaster.R
 import com.example.dictionmaster.core.ui.theme.DarkBlue
 import com.example.dictionmaster.core.ui.theme.DictionMasterTheme
+import com.example.dictionmaster.core.ui.theme.LocalDimensions
 import com.example.dictionmaster.core.ui.theme.Typography
 import kotlinx.coroutines.delay
 
@@ -35,7 +36,6 @@ import kotlinx.coroutines.delay
 fun SplashScreen(
     startActivity: () -> Unit
 ) {
-
     LaunchedEffect(true) {
         delay(2000)
         startActivity()
@@ -70,6 +70,7 @@ fun SplashScreen(
 private fun InitialLoadingIcon(
     modifier: Modifier = Modifier
 ) {
+    val dimensions = LocalDimensions.current
     val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
     val scale by infiniteTransition.animateFloat(
         initialValue = 1f,
@@ -91,7 +92,7 @@ private fun InitialLoadingIcon(
             contentDescription = null,
         )
 
-        Spacer(modifier = Modifier.height(22.dp))
+        Spacer(modifier = Modifier.height(dimensions.medium))
 
         Image(
             modifier = Modifier.align(Alignment.CenterHorizontally),

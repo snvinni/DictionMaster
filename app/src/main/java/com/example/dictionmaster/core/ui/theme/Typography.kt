@@ -17,18 +17,25 @@ val Typography = Typography(
         fontFamily = RobotoCondensedFamily,
         fontWeight = FontWeight.Light,
         fontSize = 16.sp,
-        lineHeight = 24.sp,
     ),
     bodyMedium = TextStyle(
         fontFamily = RobotoCondensedFamily,
         fontWeight = FontWeight.Light,
         fontSize = 18.sp,
-        lineHeight = 24.sp,
     ),
     bodyLarge = TextStyle(
         fontFamily = RobotoCondensedFamily,
         fontWeight = FontWeight.Light,
         fontSize = 22.sp,
-        lineHeight = 20.sp,
+    ),
+    titleLarge = TextStyle(
+        fontFamily = RobotoCondensedFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 32.sp,
+    ),
+    titleSmall = TextStyle(
+        fontFamily = RobotoCondensedFamily,
+        fontWeight = FontWeight.Light,
+        fontSize = 32.sp,
     ),
 )

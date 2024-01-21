@@ -14,15 +14,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -30,28 +36,70 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.dictionmaster.R
+import com.example.dictionmaster.core.ui.component.ObserverWithLifecycle
 import com.example.dictionmaster.core.ui.theme.Blue
 import com.example.dictionmaster.core.ui.theme.DarkBlue
 import com.example.dictionmaster.core.ui.theme.DictionMasterTheme
 import com.example.dictionmaster.core.ui.theme.LightGrey
+import com.example.dictionmaster.core.ui.theme.LocalDimensions
 import com.example.dictionmaster.core.ui.theme.Typography
 
 @Composable
 fun SearchRoute(
     viewModel: SearchViewModel = hiltViewModel()
 ) {
-//    SearchScreen(
-//        onClick = {
-//            viewModel.onSearchClick()
-//        }
-//    )
+    val snackbarHostState = remember { SnackbarHostState() }
+    val isLoading = remember { mutableStateOf(false) }
+
+    ObserverWithLifecycle(viewModel.uiState) {
+        when (it) {
+            UiState.Loading -> {
+                isLoading.value = true
+            }
+
+            is UiState.Success -> {
+
+            }
+
+            else -> {
+                isLoading.value = false
+
+                if (it is UiState.Error) {
+                    snackbarHostState.showSnackbar(
+                        message = it.message,
+                    )
+                }
+            }
+        }
+    }
+
+    SearchScreen(
+        word = viewModel.word.collectAsState().value,
+        onAction = viewModel::onAction,
+        isLoading = isLoading.value,
+        snackbarHostState = snackbarHostState,
+    )
 }
 
 @Composable
 fun SearchScreen(
-    onClick: () -> Unit
+    word: String,
+    onAction: (Action) -> Unit,
+    isLoading: Boolean,
+    snackbarHostState: SnackbarHostState
 ) {
-    Surface {
+    val dimensions = LocalDimensions.current
+
+    Scaffold(
+        modifier = Modifier
+            .padding(dimensions.large)
+            .fillMaxSize(),
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+            )
+        }
+    ) { paddingValues ->
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -64,16 +112,16 @@ fun SearchScreen(
                 ) {
                     Image(
                         painter = painterResource(R.drawable.ic_english),
-                        contentDescription = "ENGLISH",
+                        contentDescription = null,
                         modifier = Modifier.padding(
-                            8.dp
+                            dimensions.small,
                         )
                     )
 
                     Text(
-                        text = "ENGLISH",
+                        text = stringResource(R.string.search_language),
                         modifier = Modifier
-                            .padding(start = 8.dp)
+                            .padding(start = dimensions.small)
                             .align(alignment = Alignment.CenterVertically),
                         style = Typography.bodyMedium.copy(
                             letterSpacing = 1.8.sp,
@@ -87,20 +135,27 @@ fun SearchScreen(
 
                 SearchTextField(
                     scope = this@Column,
+                    word = word,
+                    onWordChange = { onAction(Action.OnWordChange(it)) },
                 )
             }
 
             Button(
-                onClick = { onClick() },
+                enabled = word.isNotEmpty(),
+                onClick = { onAction(Action.OnSearch) },
                 modifier = Modifier
                     .align(alignment = Alignment.BottomCenter)
-                    .padding(28.dp)
+                    .padding(paddingValues)
                     .height(64.dp)
                     .fillMaxWidth(),
                 shape = MaterialTheme.shapes.large,
                 content = {
                     Text(
-                        text = "SEARCH",
+                        text = if (isLoading) {
+                            stringResource(R.string.search_button_loading)
+                        } else {
+                            stringResource(R.string.search_button)
+                        },
                         style = Typography.bodyMedium.copy(
                             fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
@@ -112,6 +167,7 @@ fun SearchScreen(
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = Blue,
+                    disabledContainerColor = Color.Gray,
                 ),
             )
         }
@@ -120,15 +176,19 @@ fun SearchScreen(
 
 @Composable
 fun SearchTextField(
+    word: String,
+    onWordChange: (String) -> Unit,
     scope: ColumnScope,
 ) = scope.run {
+    val dimensions = LocalDimensions.current
+
     TextField(
         modifier = Modifier
             .align(alignment = Alignment.CenterHorizontally)
             .fillMaxWidth()
-            .padding(horizontal = 64.dp)
-            .defaultMinSize(minHeight = 38.dp),
-        value = "Education",
+            .padding(horizontal = dimensions.huge)
+            .defaultMinSize(minHeight = dimensions.big),
+        value = word,
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = Color.White,
             disabledContainerColor = Color.White,
@@ -136,12 +196,12 @@ fun SearchTextField(
             focusedIndicatorColor = Color.White,
             unfocusedIndicatorColor = Color.White,
         ),
-        onValueChange = {},
-        textStyle = Typography.bodyLarge.copy(
-            fontSize = 32.sp,
-            textAlign = TextAlign.Center,
-            fontWeight = FontWeight.Bold,
+        onValueChange = {
+            onWordChange(it)
+        },
+        textStyle = Typography.titleLarge.copy(
             color = DarkBlue,
+            textAlign = TextAlign.Center,
         ),
         placeholder = {
             Box(
@@ -151,10 +211,8 @@ fun SearchTextField(
                 Text(
                     modifier = Modifier
                         .align(Alignment.Center),
-                    text = "Type a word...",
-                    style = Typography.bodyLarge.copy(
-                        fontSize = 32.sp
-                    ),
+                    text = stringResource(R.string.search_hint),
+                    style = Typography.titleSmall,
                     textAlign = TextAlign.Center,
                     color = LightGrey,
                 )
@@ -169,7 +227,10 @@ fun SearchTextField(
 fun SearchScreenPreview() {
     DictionMasterTheme {
         SearchScreen(
-            {}
+            word = "",
+            onAction = {},
+            isLoading = false,
+            snackbarHostState = SnackbarHostState(),
         )
     }
 }

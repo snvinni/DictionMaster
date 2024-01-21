@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import com.example.dictionmaster.core.ui.component.DMNavHost
 import com.example.dictionmaster.core.ui.component.NavHostConfig
-import com.example.dictionmaster.feature.search.SearchScreen
+import com.example.dictionmaster.feature.search.SearchRoute
 
 @Composable
 fun MainRoute(
@@ -19,15 +19,7 @@ fun MainRoute(
             NavHostConfig(
                 route = "search_screen",
                 screenDestination = {
-                    SearchScreen(
-                        onClick = {
-                            navController.navigate("test") {
-                                popUpTo("search_screen") {
-                                    inclusive = true
-                                }
-                            }
-                        }
-                    )
+                    SearchRoute()
                 }
             ),
         )
