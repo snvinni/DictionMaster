@@ -13,7 +13,7 @@ class IsUserHasReachedFreeSearchLimitUseCase @Inject constructor(
         val currentUserTimeInMillis = user.firstRequestTimeInMillis
         val currentSearchCount = user.currentSearchCount
 
-        return (currentSearchCount >= 10 && currentDayInMillis < currentUserTimeInMillis)
+        return (currentSearchCount > 10 && currentDayInMillis < currentUserTimeInMillis)
     }
 
 }

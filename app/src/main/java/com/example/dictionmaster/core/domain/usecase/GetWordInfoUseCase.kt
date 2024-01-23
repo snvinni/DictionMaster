@@ -21,7 +21,7 @@ class GetWordInfoUseCase @Inject constructor(
             )
         }
 
-        if (user.currentSearchCount >= 10) {
+        if (user.currentSearchCount > 10) {
             return Result.Error(
                 isUserHasReachedFreeSearchLimit = true,
             )
