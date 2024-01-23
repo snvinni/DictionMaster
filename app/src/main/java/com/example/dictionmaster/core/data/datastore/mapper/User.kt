@@ -3,26 +3,26 @@ package com.example.dictionmaster.core.data.datastore.mapper
 import com.example.dictionmaster.core.data.datastore.proto.user.DataUser
 import com.example.dictionmaster.core.data.datastore.proto.wordinfo.DataWordInfo
 import com.example.dictionmaster.core.domain.model.User
-import com.example.dictionmaster.core.domain.model.WordInfo
+import com.example.dictionmaster.core.domain.model.Word
 
 fun DataUser.toModel() = User(
     currentSearchCount = currentSearchCount,
     firstRequestTimeInMillis = firstRequestTimeInMillis,
     wordsAlreadySearched = wordsAlreadySearchedList.map {
-        WordInfo(
+        Word(
             id = it.id,
             word = it.word,
             phonetics = it.phoneticsList.map { phonetic ->
-                WordInfo.Phonetic(
+                Word.Phonetic(
                     text = phonetic.text,
                     audio = phonetic.audio,
                 )
             },
             meanings = it.meaningsList.map { meaning ->
-                WordInfo.Meaning(
+                Word.Meaning(
                     partOfSpeech = meaning.partOfSpeech,
                     definitions = meaning.definitionsList.map { definition ->
-                        WordInfo.Meaning.Definition(
+                        Word.Meaning.Definition(
                             definition = definition.definition,
                             example = definition.example,
                         )
@@ -42,7 +42,7 @@ fun DataUser.Builder.apply(user: User) = apply {
 
 @JvmName("applyWordsAlreadySearched")
 fun DataUser.Builder.apply(
-    wordsAlreadySearched: List<WordInfo>
+    wordsAlreadySearched: List<Word>
 ) = apply {
     clearWordsAlreadySearched()
     addAllWordsAlreadySearched(
@@ -59,7 +59,7 @@ fun DataUser.Builder.apply(
 
 @JvmName("applyPhonetics")
 fun DataWordInfo.Builder.apply(
-    phonetics: List<WordInfo.Phonetic>
+    phonetics: List<Word.Phonetic>
 ) = apply {
     clearPhonetics()
     addAllPhonetics(
@@ -74,7 +74,7 @@ fun DataWordInfo.Builder.apply(
 
 @JvmName("applyMeanings")
 fun DataWordInfo.Builder.apply(
-    meanings: List<WordInfo.Meaning>
+    meanings: List<Word.Meaning>
 ) = apply {
     clearMeanings()
     addAllMeanings(
@@ -89,7 +89,7 @@ fun DataWordInfo.Builder.apply(
 
 @JvmName("applyDefinitions")
 fun DataWordInfo.Meaning.Builder.apply(
-    definitions: List<WordInfo.Meaning.Definition>
+    definitions: List<Word.Meaning.Definition>
 ) = apply {
     clearDefinitions()
     addAllDefinitions(

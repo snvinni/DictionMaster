@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.dictionmaster.R
+import com.example.dictionmaster.core.ui.component.DMIcon
 import com.example.dictionmaster.core.ui.theme.DarkBlue
 import com.example.dictionmaster.core.ui.theme.DictionMasterTheme
 import com.example.dictionmaster.core.ui.theme.LocalDimensions
@@ -40,6 +41,14 @@ fun SplashScreen(
     startActivity: () -> Unit,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
+    val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
+    val scale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.1f,
+        animationSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse),
+        label = "scale"
+    )
+
     LaunchedEffect(true) {
         viewModel.updateUserTime().join()
         delay(2000)
@@ -55,9 +64,14 @@ fun SplashScreen(
             modifier = Modifier
                 .fillMaxSize()
         ) {
-            InitialLoadingIcon(
+            DMIcon(
                 modifier = Modifier
                     .align(Alignment.Center)
+                    .graphicsLayer {
+                        scaleX = scale
+                        scaleY = scale
+                        transformOrigin = TransformOrigin.Center
+                    }
             )
 
             Text(
@@ -70,42 +84,6 @@ fun SplashScreen(
                 textAlign = TextAlign.Center,
             )
         }
-    }
-}
-
-@Composable
-private fun InitialLoadingIcon(
-    modifier: Modifier = Modifier
-) {
-    val dimensions = LocalDimensions.current
-    val infiniteTransition = rememberInfiniteTransition(label = "infinite transition")
-    val scale by infiniteTransition.animateFloat(
-        initialValue = 1f,
-        targetValue = 1.1f,
-        animationSpec = infiniteRepeatable(tween(1000), RepeatMode.Reverse),
-        label = "scale"
-    )
-
-    Column(
-        modifier = modifier.graphicsLayer {
-            scaleX = scale
-            scaleY = scale
-            transformOrigin = TransformOrigin.Center
-        }
-    ) {
-        Image(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            painter = painterResource(id = R.drawable.ic_app),
-            contentDescription = null,
-        )
-
-        Spacer(modifier = Modifier.height(dimensions.medium))
-
-        Image(
-            modifier = Modifier.align(Alignment.CenterHorizontally),
-            painter = painterResource(id = R.drawable.ic_app_tittle),
-            contentDescription = null,
-        )
     }
 }
 

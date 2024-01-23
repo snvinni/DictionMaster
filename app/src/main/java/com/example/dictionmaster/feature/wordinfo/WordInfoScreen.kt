@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -37,13 +38,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.dictionmaster.R
-import com.example.dictionmaster.core.domain.model.WordInfo
+import com.example.dictionmaster.core.domain.model.Word
 import com.example.dictionmaster.core.ui.component.DMButton
 import com.example.dictionmaster.core.ui.theme.Blue
 import com.example.dictionmaster.core.ui.theme.DarkBlue
 import com.example.dictionmaster.core.ui.theme.DictionMasterTheme
 import com.example.dictionmaster.core.ui.theme.Grey
 import com.example.dictionmaster.core.ui.theme.LightGrey
+import com.example.dictionmaster.core.ui.theme.LocalDimensions
 import com.example.dictionmaster.core.ui.theme.Typography
 import com.example.dictionmaster.feature.NavigationRoute
 import kotlinx.coroutines.flow.collectLatest
@@ -69,16 +71,18 @@ fun WordInfoRoute(
     }
 
     WordInfoScreen(
-        wordInfo = wordInfo,
+        word = wordInfo,
         onAction = viewModel::onAction,
     )
 }
 
 @Composable
 fun WordInfoScreen(
-    wordInfo: WordInfo,
+    word: Word,
     onAction: (Action) -> Unit,
 ) {
+    val dimensions = LocalDimensions.current
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -90,16 +94,16 @@ fun WordInfoScreen(
                 .verticalScroll(rememberScrollState())
                 .fillMaxSize()
         ) {
-            Column(modifier = Modifier.padding(horizontal = 30.dp)) {
-                Spacer(modifier = Modifier.height(38.dp))
+            Column(modifier = Modifier.padding(horizontal = dimensions.semiBig)) {
+                Spacer(modifier = Modifier.height(dimensions.big))
 
                 Text(
-                    text = wordInfo.word,
+                    text = word.word,
                     style = Typography.titleLarge,
                     color = DarkBlue
                 )
 
-                Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(dimensions.semiMedium))
 
                 Row {
                     Button(
@@ -121,9 +125,9 @@ fun WordInfoScreen(
                     }
 
                     Text(
-                        text = wordInfo.phonetics.first().text,
+                        text = word.phonetics.first().text,
                         modifier = Modifier
-                            .padding(start = 11.dp)
+                            .padding(start = dimensions.semiMedium)
                             .align(Alignment.CenterVertically),
                         style = Typography.bodyLarge.copy(
                             fontWeight = FontWeight.Bold,
@@ -136,24 +140,24 @@ fun WordInfoScreen(
                 Spacer(modifier = Modifier.height(25.dp))
 
                 WordMeanings(
-                    wordMeanings = wordInfo.meanings,
+                    wordMeanings = word.meanings,
                 )
             }
 
             Divider(
                 modifier = Modifier
-                    .padding(bottom = 30.dp)
+                    .padding(bottom = dimensions.semiBig)
                     .fillMaxSize(),
                 color = Color.LightGray,
                 thickness = 1.dp,
             )
 
             Column(
-                modifier = Modifier.padding(horizontal = 30.dp),
+                modifier = Modifier.padding(horizontal = dimensions.semiBig),
                 verticalArrangement = Arrangement.Bottom
             ) {
                 Text(
-                    text = "That’s it for “${wordInfo.word}”!",
+                    text = "That’s it for “${word.word}”!",
                     style = Typography.titleLarge.copy(
                         fontSize = 24.sp
                     ),
@@ -169,12 +173,12 @@ fun WordInfoScreen(
                     color = DarkBlue,
                 )
 
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(dimensions.medium))
 
                 DMButton(
-                    text = "NEW SEARCH",
+                    text = stringResource(R.string.word_button_text),
                     paddingValues = PaddingValues(
-                        bottom = 30.dp
+                        bottom = dimensions.semiBig
                     ),
                     onClick = {
                         onAction(Action.OnNewSearch(false))
@@ -187,15 +191,16 @@ fun WordInfoScreen(
 
 @Composable
 fun WordMeanings(
-    wordMeanings: List<WordInfo.Meaning>,
+    wordMeanings: List<Word.Meaning>,
 ) {
+    val dimensions = LocalDimensions.current
     val currentPosition = remember { mutableIntStateOf(1) }
 
     wordMeanings.onEach { meaning ->
         meaning.definitions.onEach { definition ->
             Column {
                 Text(
-                    modifier = Modifier.padding(bottom = 12.dp),
+                    modifier = Modifier.padding(bottom = dimensions.semiMedium),
                     text = buildAnnotatedString {
                         withStyle(
                             SpanStyle(
@@ -228,7 +233,7 @@ fun WordMeanings(
                 if (definition.example.isNotEmpty()) {
                     Text(
                         modifier = Modifier.padding(
-                            bottom = 22.dp
+                            bottom = dimensions.medium
                         ),
                         text = "• ${definition.example}",
                         style = Typography.bodySmall,
@@ -247,21 +252,21 @@ fun WordInfoScreenPreview() {
     DictionMasterTheme {
         WordInfoScreen(
             onAction = {},
-            wordInfo = WordInfo(
+            word = Word(
                 id = 1,
                 word = "Education",
                 phonetics = listOf(
-                    WordInfo.Phonetic(
+                    Word.Phonetic(
                         text = "ɛdjʊˈkeɪʃ(ə)n",
                         audio = "https://lex-audio.useremarkable.com/mp3/education_us_1_rr.mp3"
                     )
                 ),
                 meanings = listOf(
-                    WordInfo.Meaning(
+                    Word.Meaning(
                         partOfSpeech = "noun",
                         definitions = listOf(
-                            WordInfo.Meaning.Definition(
-                                definition = "the process of receiving or giving systematic instruction, especially at a school or university.",
+                            Word.Meaning.Definition(
+                                definition = "definition",
                                 example = "a new system of public education"
                             ),
                         ),

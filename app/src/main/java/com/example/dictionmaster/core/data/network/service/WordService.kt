@@ -1,12 +1,12 @@
 package com.example.dictionmaster.core.data.network.service
 
-import com.example.dictionmaster.core.data.network.response.WordInfoResponse
+import com.example.dictionmaster.core.data.network.response.WordResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 
-interface WordInfoService {
+interface WordService {
     @GET("entries/en/{word}")
-    suspend fun getWordInfo(
+    suspend fun getWord(
         @Path("word") word: String
-    ): List<WordInfoResponse>
+    ): List<WordResponse>
 }

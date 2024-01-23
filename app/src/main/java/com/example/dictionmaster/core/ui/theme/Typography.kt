@@ -21,7 +21,7 @@ val Typography = Typography(
     bodyMedium = TextStyle(
         fontFamily = RobotoCondensedFamily,
         fontWeight = FontWeight.Light,
-        fontSize = 18.sp,
+        fontSize = 20.sp,
     ),
     bodyLarge = TextStyle(
         fontFamily = RobotoCondensedFamily,

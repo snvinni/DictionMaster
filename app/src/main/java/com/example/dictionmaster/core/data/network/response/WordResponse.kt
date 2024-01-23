@@ -2,7 +2,7 @@ package com.example.dictionmaster.core.data.network.response
 
 import com.google.gson.annotations.SerializedName
 
-data class WordInfoResponse(
+data class WordResponse(
     @SerializedName("word")
     val word: String,
     @SerializedName("phonetic")

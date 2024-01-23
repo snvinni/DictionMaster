@@ -2,7 +2,7 @@ package com.example.dictionmaster.feature.wordinfo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dictionmaster.core.domain.model.WordInfo
+import com.example.dictionmaster.core.domain.model.Word
 import com.example.dictionmaster.core.domain.repository.UserRepository
 import com.example.dictionmaster.core.domain.usecase.IsUserHasReachedFreeSearchLimitUseCase
 import com.example.dictionmaster.feature.NavigationRoute
@@ -20,7 +20,7 @@ class WordInfoViewModel @Inject constructor(
     private val eventChannel = Channel<NavigationRoute>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
-    fun getCurrentWord(id: Int): WordInfo {
+    fun getCurrentWord(id: Int): Word {
         return userRepository.user.wordsAlreadySearched.find { it.id == id }
             ?: throw Exception("Word not found")
     }

@@ -10,6 +10,7 @@ import com.example.dictionmaster.core.ui.component.DMNavHost
 import com.example.dictionmaster.core.ui.component.NavHostConfig
 import com.example.dictionmaster.feature.NavigationRoute
 import com.example.dictionmaster.feature.search.SearchRoute
+import com.example.dictionmaster.feature.subscribe.SubscribeScreen
 import com.example.dictionmaster.feature.wordinfo.WordInfoRoute
 
 @Composable
@@ -63,11 +64,19 @@ fun MainRoute() {
                         ) { navigationRoute ->
                             when (navigationRoute) {
                                 NavigationRoute.NavigateToSearch -> {
-                                    navController.navigate("search_screen")
+                                    navController.navigate("search_screen") {
+                                        popUpTo("word_info_screen/$id") {
+                                            inclusive = true
+                                        }
+                                    }
                                 }
 
                                 NavigationRoute.NavigateToSubscribe -> {
-                                    navController.navigate("subscribe_screen")
+                                    navController.navigate("subscribe_screen") {
+                                        popUpTo("word_info_screen/$id") {
+                                            inclusive = true
+                                        }
+                                    }
                                 }
 
                                 is NavigationRoute.NavigateToWordInfo -> Unit
@@ -79,9 +88,7 @@ fun MainRoute() {
             NavHostConfig(
                 route = "subscribe_screen",
                 screenDestination = {
-                    Surface {
-                        Text(text = "Subscribe Screen")
-                    }
+                    SubscribeScreen()
                 }
             ),
         )

@@ -23,12 +23,13 @@ fun DMButton(
     text: String,
     paddingValues: PaddingValues,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
     isEnabled: Boolean = true,
 ) {
     Button(
         enabled = isEnabled,
         onClick = { onClick() },
-        modifier = Modifier
+        modifier = modifier
             .padding(paddingValues)
             .height(64.dp)
             .fillMaxWidth(),
@@ -37,7 +38,6 @@ fun DMButton(
             Text(
                 text = text,
                 style = Typography.bodyMedium.copy(
-                    fontSize = 18.sp,
                     fontWeight = FontWeight.Bold,
                     letterSpacing = 1.8.sp,
                 ),

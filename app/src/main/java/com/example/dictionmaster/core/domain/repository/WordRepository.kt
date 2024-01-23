@@ -1,10 +1,10 @@
 package com.example.dictionmaster.core.domain.repository
 
-import com.example.dictionmaster.core.domain.model.WordInfo
+import com.example.dictionmaster.core.domain.model.Word
 import com.example.dictionmaster.core.domain.util.Resource
 
-interface WordInfoRepository {
+interface WordRepository {
     suspend fun getWordInfo(
         word: String
-    ): Resource.Result<WordInfo, Throwable>
+    ): Resource.Result<Word, Throwable>
 }

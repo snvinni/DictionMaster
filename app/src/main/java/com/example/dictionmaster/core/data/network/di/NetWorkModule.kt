@@ -1,6 +1,6 @@
 package com.example.dictionmaster.core.data.network.di
 
-import com.example.dictionmaster.core.data.network.service.WordInfoService
+import com.example.dictionmaster.core.data.network.service.WordService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,11 +14,11 @@ import javax.inject.Singleton
 object NetWorkModule {
     @Provides
     @Singleton
-    fun provideRetrofit(): WordInfoService {
+    fun provideRetrofit(): WordService {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create()).build()
-            .create(WordInfoService::class.java)
+            .create(WordService::class.java)
     }
 
     private const val BASE_URL = "https://api.dictionaryapi.dev/api/v2/"

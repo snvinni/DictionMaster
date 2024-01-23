@@ -1,22 +1,22 @@
 package com.example.dictionmaster.core.data.network.mapper
 
-import com.example.dictionmaster.core.data.network.response.WordInfoResponse
-import com.example.dictionmaster.core.domain.model.WordInfo
+import com.example.dictionmaster.core.data.network.response.WordResponse
+import com.example.dictionmaster.core.domain.model.Word
 
-fun WordInfoResponse.toModel() = WordInfo(
+fun WordResponse.toModel() = Word(
     id = -1,
     word = word,
     phonetics = phonetics.map { phonetic ->
-        WordInfo.Phonetic(
+        Word.Phonetic(
             text = phonetic.text ?: "",
             audio = phonetic.audio
         )
     },
     meanings = meanings.map { meaning ->
-        WordInfo.Meaning(
+        Word.Meaning(
             partOfSpeech = meaning.partOfSpeech,
             definitions = meaning.definitions.map { definition ->
-                WordInfo.Meaning.Definition(
+                Word.Meaning.Definition(
                     definition = definition.definition,
                     example = definition.example ?: "",
                 )
