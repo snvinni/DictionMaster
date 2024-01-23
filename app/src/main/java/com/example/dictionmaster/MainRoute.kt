@@ -22,30 +22,27 @@ fun MainRoute(
             NavHostConfig(
                 route = "search_screen",
                 screenDestination = {
-                    SearchRoute(
-                        navController = navController,
-                        onNavigateToWordInfo = { word ->
-                            navController.navigate("word_info_screen/$word") {
-                                popUpTo("search_screen") {
-                                    inclusive = true
-                                }
+                    SearchRoute { id ->
+                        navController.navigate("word_info_screen/$id") {
+                            popUpTo("search_screen") {
+                                inclusive = true
                             }
                         }
-                    )
+                    }
                 }
             ),
 
             NavHostConfig(
-                route = "word_info_screen/{word}",
+                route = "word_info_screen/{id}",
                 arguments = listOf(
-                    navArgument("word") {
-                        type = NavType.StringType
+                    navArgument("id") {
+                        type = NavType.IntType
                     }
                 ),
-                screenDestination = { word ->
-                    if (word != null) {
+                screenDestination = { id ->
+                    if (id != null) {
                         WordInfoRoute(
-                            wordInfo = word
+                            wordInfoId = id
                         )
                     }
                 }

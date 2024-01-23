@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.dictionmaster.core.domain.model.WordInfo
+import com.example.dictionmaster.core.domain.repository.UserRepository
 import com.example.dictionmaster.core.domain.usecase.GetWordInfoUseCase
+import com.example.dictionmaster.core.domain.usecase.UpdateUserUseCase
 import com.example.dictionmaster.core.domain.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +18,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SearchViewModel @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
-    private val getWordInfoUseCase: GetWordInfoUseCase
+    private val getWordInfoUseCase: GetWordInfoUseCase,
+    private val updateUserUseCase: UpdateUserUseCase,
 ) : ViewModel() {
 
     val word = savedStateHandle.getStateFlow("word", "")
@@ -41,7 +44,11 @@ class SearchViewModel @Inject constructor(
         _uiState.update {
             when (response) {
                 is Resource.Result.Error -> UiState.Error(GENERIC_ERROR_MESSAGE)
-                is Resource.Result.Success -> UiState.Success(response.data)
+                is Resource.Result.Success -> {
+                    updateUserUseCase(response.data)
+
+                    UiState.Success(response.data)
+                }
             }
         }
     }

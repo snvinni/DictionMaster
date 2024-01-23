@@ -1,6 +1,8 @@
 package com.example.dictionmaster.core.data.repository.di
 
+import com.example.dictionmaster.core.data.repository.UserRepositoryImpl
 import com.example.dictionmaster.core.data.repository.WordInfoRepositoryImpl
+import com.example.dictionmaster.core.domain.repository.UserRepository
 import com.example.dictionmaster.core.domain.repository.WordInfoRepository
 import dagger.Binds
 import dagger.Module
@@ -16,4 +18,10 @@ internal abstract class RepositoryModule {
     abstract fun bindsWordInfoRepository(
         wordInfoRepositoryImpl: WordInfoRepositoryImpl,
     ): WordInfoRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsUserRepository(
+        userRepositoryImpl: UserRepositoryImpl,
+    ): UserRepository
 }

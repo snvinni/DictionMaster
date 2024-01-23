@@ -48,11 +48,11 @@ fun DMNavHost(
                     )
                 }
             ) {
-                val word = remember {
-                    it.arguments?.getString("word")
+                val wordId = remember {
+                    it.arguments?.getInt("id")
                 }
 
-                config.screenDestination(word)
+                config.screenDestination(wordId)
             }
         }
 
@@ -61,6 +61,6 @@ fun DMNavHost(
 
 data class NavHostConfig(
     val route: String,
-    val screenDestination: @Composable (String?) -> Unit,
+    val screenDestination: @Composable (Int?) -> Unit,
     val arguments: List<NamedNavArgument> = emptyList(),
 )
