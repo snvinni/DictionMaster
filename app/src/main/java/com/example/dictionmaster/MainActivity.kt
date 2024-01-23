@@ -17,9 +17,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             DictionMasterTheme {
                 // A surface container using the 'background' color from the theme
-                MainRoute(
-                    viewModel = viewModel,
-                )
+                MainRoute()
             }
         }
     }

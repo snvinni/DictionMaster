@@ -6,6 +6,7 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,12 +20,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.dictionmaster.R
 import com.example.dictionmaster.core.ui.theme.DarkBlue
 import com.example.dictionmaster.core.ui.theme.DictionMasterTheme
@@ -34,15 +37,19 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(
-    startActivity: () -> Unit
+    startActivity: () -> Unit,
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
     LaunchedEffect(true) {
+        viewModel.updateUserTime().join()
         delay(2000)
         startActivity()
     }
 
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .background(Color.White)
+            .fillMaxSize(),
     ) {
         Box(
             modifier = Modifier

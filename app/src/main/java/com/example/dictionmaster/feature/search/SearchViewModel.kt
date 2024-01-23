@@ -3,14 +3,15 @@ package com.example.dictionmaster.feature.search
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.dictionmaster.core.domain.model.WordInfo
-import com.example.dictionmaster.core.domain.repository.UserRepository
 import com.example.dictionmaster.core.domain.usecase.GetWordInfoUseCase
+import com.example.dictionmaster.core.domain.usecase.Result
 import com.example.dictionmaster.core.domain.usecase.UpdateUserUseCase
-import com.example.dictionmaster.core.domain.util.Resource
+import com.example.dictionmaster.feature.NavigationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,7 +28,10 @@ class SearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState = _uiState.asStateFlow()
 
-    fun onAction(action: Action) {
+    private val _navigationEvents = Channel<NavigationRoute>(Channel.BUFFERED)
+    val navigationEvents = _navigationEvents.receiveAsFlow()
+
+    fun onAction(action: Action) = viewModelScope.launch {
         when (action) {
             is Action.OnSearch -> onSearch()
             is Action.OnWordChange -> onWordChange(action.word)
@@ -39,16 +43,27 @@ class SearchViewModel @Inject constructor(
             UiState.Loading
         }
 
-        val response = getWordInfoUseCase(word.value)
-
-        _uiState.update {
-            when (response) {
-                is Resource.Result.Error -> UiState.Error(GENERIC_ERROR_MESSAGE)
-                is Resource.Result.Success -> {
-                    updateUserUseCase(response.data)
-
-                    UiState.Success(response.data)
+        when (val response = getWordInfoUseCase(word.value)) {
+            is Result.Error -> {
+                if (response.isUserHasReachedFreeSearchLimit) {
+                    _navigationEvents.send(
+                        NavigationRoute.NavigateToSubscribe
+                    )
+                } else {
+                    _uiState.update {
+                        UiState.Error(
+                            message = GENERIC_ERROR_MESSAGE,
+                        )
+                    }
                 }
+            }
+
+            is Result.Success -> {
+                updateUserUseCase(response.data)
+
+                _navigationEvents.send(
+                    NavigationRoute.NavigateToWordInfo(response.data.id)
+                )
             }
         }
     }
@@ -58,13 +73,11 @@ class SearchViewModel @Inject constructor(
     }
 
     companion object {
-        const val GENERIC_ERROR_MESSAGE = "Something went wrong"
+        const val GENERIC_ERROR_MESSAGE = "Something went wrong, try again!"
     }
 }
 
 sealed interface UiState {
-    data class Success(val wordInfo: WordInfo) : UiState
-
     data object Loading : UiState
 
     data class Error(

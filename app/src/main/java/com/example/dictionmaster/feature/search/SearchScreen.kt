@@ -43,23 +43,24 @@ import com.example.dictionmaster.core.ui.theme.DictionMasterTheme
 import com.example.dictionmaster.core.ui.theme.Grey
 import com.example.dictionmaster.core.ui.theme.LocalDimensions
 import com.example.dictionmaster.core.ui.theme.Typography
+import com.example.dictionmaster.feature.NavigationRoute
 
 @Composable
 fun SearchRoute(
     viewModel: SearchViewModel = hiltViewModel(),
-    onNavigateToWordInfo: (Int) -> Unit,
+    onNavigate: (NavigationRoute) -> Unit,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
     val isLoading = remember { mutableStateOf(false) }
+
+    ObserverWithLifecycle(viewModel.navigationEvents) { navigationRoute ->
+        onNavigate(navigationRoute)
+    }
 
     ObserverWithLifecycle(viewModel.uiState) { uiState ->
         when (uiState) {
             UiState.Loading -> {
                 isLoading.value = true
-            }
-
-            is UiState.Success -> {
-                onNavigateToWordInfo(uiState.wordInfo.id)
             }
 
             else -> {
@@ -116,7 +117,6 @@ fun SearchScreen(
             )
         },
     ) { paddingValues ->
-
         Column(
             modifier = Modifier
                 .padding(paddingValues)

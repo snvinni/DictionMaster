@@ -45,6 +45,7 @@ import com.example.dictionmaster.core.ui.theme.DictionMasterTheme
 import com.example.dictionmaster.core.ui.theme.Grey
 import com.example.dictionmaster.core.ui.theme.LightGrey
 import com.example.dictionmaster.core.ui.theme.Typography
+import com.example.dictionmaster.feature.NavigationRoute
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
@@ -61,6 +62,8 @@ fun WordInfoRoute(
                 NavigationRoute.NavigateToSearch -> onNavigate(NavigationRoute.NavigateToSearch)
 
                 NavigationRoute.NavigateToSubscribe -> onNavigate(NavigationRoute.NavigateToSubscribe)
+
+                is NavigationRoute.NavigateToWordInfo -> Unit
             }
         }
     }
