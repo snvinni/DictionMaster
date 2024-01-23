@@ -18,19 +18,18 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme = darkColorScheme(
     primary = DarkBlue,
     secondary = Blue,
-    tertiary = Grey
+    tertiary = Gray
 )
 
 private val LightColorScheme = lightColorScheme(
     primary = DarkBlue,
     secondary = Blue,
-    tertiary = Grey
+    tertiary = Gray
 )
 
 @Composable
 fun DictionMasterTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {

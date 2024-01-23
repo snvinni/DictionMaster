@@ -1,5 +1,8 @@
 package com.example.dictionmaster.feature.wordinfo
 
+import android.media.AudioAttributes
+import android.media.MediaPlayer
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,6 +29,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -43,7 +47,7 @@ import com.example.dictionmaster.core.ui.component.DMButton
 import com.example.dictionmaster.core.ui.theme.Blue
 import com.example.dictionmaster.core.ui.theme.DarkBlue
 import com.example.dictionmaster.core.ui.theme.DictionMasterTheme
-import com.example.dictionmaster.core.ui.theme.Grey
+import com.example.dictionmaster.core.ui.theme.Gray
 import com.example.dictionmaster.core.ui.theme.LightGrey
 import com.example.dictionmaster.core.ui.theme.LocalDimensions
 import com.example.dictionmaster.core.ui.theme.Typography
@@ -82,6 +86,7 @@ fun WordInfoScreen(
     onAction: (Action) -> Unit,
 ) {
     val dimensions = LocalDimensions.current
+    val context = LocalContext.current
 
     Surface(
         modifier = Modifier
@@ -92,7 +97,8 @@ fun WordInfoScreen(
             modifier = Modifier
                 .background(Color.White)
                 .verticalScroll(rememberScrollState())
-                .fillMaxSize()
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Column(modifier = Modifier.padding(horizontal = dimensions.semiBig)) {
                 Spacer(modifier = Modifier.height(dimensions.big))
@@ -111,7 +117,31 @@ fun WordInfoScreen(
                         contentPadding = PaddingValues(13.dp),
                         shape = CircleShape,
                         onClick = {
+                            val mediaPlayer = MediaPlayer().apply {
+                                setAudioAttributes(
+                                    AudioAttributes.Builder()
+                                        .setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+                                        .build()
+                                )
+                            }
 
+                            try {
+                                mediaPlayer.setDataSource(
+                                    word.phonetics.first { it.audio.isNotEmpty() }.audio
+                                )
+                                mediaPlayer.prepareAsync()
+                                mediaPlayer.setOnPreparedListener { mp ->
+                                    mp.start()
+                                }
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+
+                                Toast.makeText(
+                                    context,
+                                    "Error playing audio, try again!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Blue,
@@ -144,19 +174,20 @@ fun WordInfoScreen(
                 )
             }
 
-            Divider(
-                modifier = Modifier
-                    .padding(bottom = dimensions.semiBig)
-                    .fillMaxSize(),
-                color = Color.LightGray,
-                thickness = 1.dp,
-            )
-
             Column(
-                modifier = Modifier.padding(horizontal = dimensions.semiBig),
                 verticalArrangement = Arrangement.Bottom
             ) {
+
+                Divider(
+                    modifier = Modifier
+                        .padding(bottom = dimensions.semiBig)
+                        .fillMaxSize(),
+                    color = Color.LightGray,
+                    thickness = 1.dp,
+                )
+
                 Text(
+                    modifier = Modifier.padding(horizontal = dimensions.semiBig),
                     text = "That’s it for “${word.word}”!",
                     style = Typography.titleLarge.copy(
                         fontSize = 24.sp
@@ -166,7 +197,9 @@ fun WordInfoScreen(
 
                 Text(
                     modifier = Modifier.padding(
-                        top = 8.dp
+                        top = dimensions.small,
+                        start = dimensions.semiBig,
+                        end = dimensions.semiBig,
                     ),
                     text = "Try another search now!",
                     style = Typography.bodySmall,
@@ -178,6 +211,8 @@ fun WordInfoScreen(
                 DMButton(
                     text = stringResource(R.string.word_button_text),
                     paddingValues = PaddingValues(
+                        start = dimensions.semiBig,
+                        end = dimensions.semiBig,
                         bottom = dimensions.semiBig
                     ),
                     onClick = {
@@ -213,7 +248,7 @@ fun WordMeanings(
                         withStyle(
                             SpanStyle(
                                 fontWeight = FontWeight.Bold,
-                                color = Grey
+                                color = Gray
                             )
                         ) {
                             append("[${meaning.partOfSpeech}]")

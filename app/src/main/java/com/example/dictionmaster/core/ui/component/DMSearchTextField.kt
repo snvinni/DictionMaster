@@ -16,7 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.dictionmaster.R
 import com.example.dictionmaster.core.ui.theme.DarkBlue
-import com.example.dictionmaster.core.ui.theme.Grey
+import com.example.dictionmaster.core.ui.theme.Gray
 import com.example.dictionmaster.core.ui.theme.LocalDimensions
 import com.example.dictionmaster.core.ui.theme.Typography
 
@@ -60,7 +60,7 @@ fun SearchTextField(
                     text = stringResource(R.string.search_hint),
                     style = Typography.titleSmall,
                     textAlign = TextAlign.Center,
-                    color = Grey,
+                    color = Gray,
                 )
             }
         },
