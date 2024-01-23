@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlinAndroid)
     alias(libs.plugins.ksp)
     alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.protobuf)
 }
 
 android {
@@ -51,6 +52,22 @@ android {
     }
 }
 
+protobuf {
+    protoc {
+        artifact = "com.google.protobuf:protoc:3.24.4"
+    }
+
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                register("java") {
+                    option("lite")
+                }
+            }
+        }
+    }
+}
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -83,4 +100,8 @@ dependencies {
 
     // Jetpack Compose Integration
     implementation(libs.androidx.navigation.compose)
+
+    // Data Store
+    implementation(libs.datastore)
+    implementation(libs.protobuf)
 }

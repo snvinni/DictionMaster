@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "com.example.dictionmaster.core.data.datastore.proto.user";
+option java_multiple_files = true;
+
+import "wordinfo.proto";
+
+message DataUser {
+  int32 currentSearchCount = 1;
+  repeated DataWordInfo wordsAlreadySearched = 2;
+}

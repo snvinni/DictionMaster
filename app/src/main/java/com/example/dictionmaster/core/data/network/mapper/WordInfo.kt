@@ -4,6 +4,7 @@ import com.example.dictionmaster.core.data.network.response.WordInfoResponse
 import com.example.dictionmaster.core.domain.model.WordInfo
 
 fun WordInfoResponse.toModel() = WordInfo(
+    id = -1,
     word = word,
     phonetics = phonetics.map { phonetic ->
         WordInfo.Phonetic(

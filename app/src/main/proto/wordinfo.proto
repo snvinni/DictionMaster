@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_package = "com.example.dictionmaster.core.data.datastore.proto.wordinfo";
+option java_multiple_files = true;
+
+message DataWordInfo {
+  int32 id = 1;
+  string word = 2;
+  repeated Phonetics phonetics = 3;
+  repeated Meaning meanings = 4;
+
+  message Phonetics {
+    string text = 1;
+    string audio = 2;
+  }
+
+  message Meaning {
+    string partOfSpeech = 1;
+    repeated Definition definitions = 2;
+
+    message Definition {
+      string definition = 1;
+      string example = 2;
+    }
+  }
+}

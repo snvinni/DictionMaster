@@ -1,6 +1,7 @@
 package com.example.dictionmaster.core.domain.model
 
 data class WordInfo(
+    val id: Int,
     val word: String,
     val phonetics: List<Phonetic>,
     val meanings: List<Meaning>
