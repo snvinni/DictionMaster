@@ -16,7 +16,7 @@ data class WordInfoResponse(
 ) {
     data class Phonetics(
         @SerializedName("text")
-        val text: String,
+        val text: String?,
         @SerializedName("audio")
         val audio: String,
     )

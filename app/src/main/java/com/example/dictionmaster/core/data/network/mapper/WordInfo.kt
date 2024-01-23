@@ -8,7 +8,7 @@ fun WordInfoResponse.toModel() = WordInfo(
     word = word,
     phonetics = phonetics.map { phonetic ->
         WordInfo.Phonetic(
-            text = phonetic.text,
+            text = phonetic.text ?: "",
             audio = phonetic.audio
         )
     },
