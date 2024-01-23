@@ -1,9 +1,11 @@
 package com.example.dictionmaster.feature.search
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -11,9 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -29,18 +30,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.dictionmaster.R
+import com.example.dictionmaster.core.ui.component.DMButton
 import com.example.dictionmaster.core.ui.component.ObserverWithLifecycle
-import com.example.dictionmaster.core.ui.theme.Blue
 import com.example.dictionmaster.core.ui.theme.DarkBlue
 import com.example.dictionmaster.core.ui.theme.DictionMasterTheme
-import com.example.dictionmaster.core.ui.theme.LightGrey
+import com.example.dictionmaster.core.ui.theme.Grey
 import com.example.dictionmaster.core.ui.theme.LocalDimensions
 import com.example.dictionmaster.core.ui.theme.Typography
 
@@ -92,84 +92,71 @@ fun SearchScreen(
     val dimensions = LocalDimensions.current
 
     Scaffold(
+        containerColor = Color.White,
+        bottomBar = {
+            DMButton(
+                text = if (isLoading) {
+                    stringResource(R.string.search_button_loading)
+                } else {
+                    stringResource(R.string.search_button)
+                },
+                onClick = { onAction(Action.OnSearch) },
+                isEnabled = word.isNotEmpty(),
+                paddingValues = PaddingValues(
+                    dimensions.large
+                ),
+            )
+        },
         modifier = Modifier
-            .padding(dimensions.large)
+            .background(Color.White)
             .fillMaxSize(),
         snackbarHost = {
             SnackbarHost(
                 hostState = snackbarHostState,
             )
-        }
+        },
     ) { paddingValues ->
-        Box(
-            modifier = Modifier.fillMaxSize()
+
+        Column(
+            modifier = Modifier
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
+                .fillMaxSize()
         ) {
-            Column {
-                Spacer(modifier = Modifier.height(44.dp))
+            Spacer(modifier = Modifier.height(44.dp))
 
-                Row(
+            Row(
+                modifier = Modifier
+                    .background(Color.White)
+                    .align(alignment = Alignment.CenterHorizontally)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.ic_english),
+                    contentDescription = null,
+                    modifier = Modifier.padding(
+                        dimensions.small,
+                    )
+                )
+
+                Text(
+                    text = stringResource(R.string.search_language),
                     modifier = Modifier
-                        .align(alignment = Alignment.CenterHorizontally)
-                ) {
-                    Image(
-                        painter = painterResource(R.drawable.ic_english),
-                        contentDescription = null,
-                        modifier = Modifier.padding(
-                            dimensions.small,
-                        )
-                    )
-
-                    Text(
-                        text = stringResource(R.string.search_language),
-                        modifier = Modifier
-                            .padding(start = dimensions.small)
-                            .align(alignment = Alignment.CenterVertically),
-                        style = Typography.bodyMedium.copy(
-                            letterSpacing = 1.8.sp,
-                        ),
-                        color = DarkBlue,
-                        textAlign = TextAlign.Center,
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(124.dp))
-
-                SearchTextField(
-                    scope = this@Column,
-                    word = word,
-                    onWordChange = { onAction(Action.OnWordChange(it)) },
+                        .padding(start = dimensions.small)
+                        .align(alignment = Alignment.CenterVertically),
+                    style = Typography.bodyMedium.copy(
+                        letterSpacing = 1.8.sp,
+                    ),
+                    color = DarkBlue,
+                    textAlign = TextAlign.Center,
                 )
             }
 
-            Button(
-                enabled = word.isNotEmpty(),
-                onClick = { onAction(Action.OnSearch) },
-                modifier = Modifier
-                    .align(alignment = Alignment.BottomCenter)
-                    .padding(paddingValues)
-                    .height(64.dp)
-                    .fillMaxWidth(),
-                shape = MaterialTheme.shapes.large,
-                content = {
-                    Text(
-                        text = if (isLoading) {
-                            stringResource(R.string.search_button_loading)
-                        } else {
-                            stringResource(R.string.search_button)
-                        },
-                        style = Typography.bodyMedium.copy(
-                            fontSize = 18.sp,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.8.sp,
-                        ),
-                        color = Color.White,
-                        textAlign = TextAlign.Center,
-                    )
-                },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Blue,
-                    disabledContainerColor = Color.Gray,
-                ),
+            Spacer(modifier = Modifier.height(124.dp))
+
+            SearchTextField(
+                scope = this@Column,
+                word = word,
+                onWordChange = { onAction(Action.OnWordChange(it)) },
             )
         }
     }
@@ -215,7 +202,7 @@ fun SearchTextField(
                     text = stringResource(R.string.search_hint),
                     style = Typography.titleSmall,
                     textAlign = TextAlign.Center,
-                    color = LightGrey,
+                    color = Grey,
                 )
             }
         },

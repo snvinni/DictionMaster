@@ -7,6 +7,7 @@ import androidx.navigation.navArgument
 import com.example.dictionmaster.core.ui.component.DMNavHost
 import com.example.dictionmaster.core.ui.component.NavHostConfig
 import com.example.dictionmaster.feature.search.SearchRoute
+import com.example.dictionmaster.feature.wordinfo.NavigationRoute
 import com.example.dictionmaster.feature.wordinfo.WordInfoRoute
 
 @Composable
@@ -43,7 +44,15 @@ fun MainRoute(
                     if (id != null) {
                         WordInfoRoute(
                             wordInfoId = id
-                        )
+                        ) { navigationRoute ->
+                            when (navigationRoute) {
+                                NavigationRoute.NavigateToSearch -> {
+                                    navController.navigate("search_screen")
+                                }
+
+                                NavigationRoute.NavigateToSubscribe -> TODO()
+                            }
+                        }
                     }
                 }
             )

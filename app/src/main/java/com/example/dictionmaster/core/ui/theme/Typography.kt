@@ -28,14 +28,19 @@ val Typography = Typography(
         fontWeight = FontWeight.Light,
         fontSize = 22.sp,
     ),
-    titleLarge = TextStyle(
-        fontFamily = RobotoCondensedFamily,
-        fontWeight = FontWeight.Bold,
-        fontSize = 32.sp,
-    ),
     titleSmall = TextStyle(
         fontFamily = RobotoCondensedFamily,
         fontWeight = FontWeight.Light,
         fontSize = 32.sp,
+    ),
+    titleMedium = TextStyle(
+        fontFamily = RobotoCondensedFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 32.sp,
+    ),
+    titleLarge = TextStyle(
+        fontFamily = RobotoCondensedFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 45.sp,
     ),
 )
