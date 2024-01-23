@@ -7,5 +7,6 @@ import "wordinfo.proto";
 
 message DataUser {
   int32 currentSearchCount = 1;
-  repeated DataWordInfo wordsAlreadySearched = 2;
+  uint64 firstRequestTimeInMillis = 2;
+  repeated DataWordInfo wordsAlreadySearched = 3;
 }

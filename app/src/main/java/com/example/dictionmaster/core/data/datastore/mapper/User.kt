@@ -7,6 +7,7 @@ import com.example.dictionmaster.core.domain.model.WordInfo
 
 fun DataUser.toModel() = User(
     currentSearchCount = currentSearchCount,
+    firstRequestTimeInMillis = firstRequestTimeInMillis,
     wordsAlreadySearched = wordsAlreadySearchedList.map {
         WordInfo(
             id = it.id,
@@ -34,6 +35,7 @@ fun DataUser.toModel() = User(
 
 fun DataUser.Builder.apply(user: User) = apply {
     currentSearchCount = user.currentSearchCount
+    firstRequestTimeInMillis = user.firstRequestTimeInMillis
     apply(user.wordsAlreadySearched)
 }
 

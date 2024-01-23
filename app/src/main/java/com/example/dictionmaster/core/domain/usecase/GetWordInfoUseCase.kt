@@ -12,17 +12,27 @@ class GetWordInfoUseCase @Inject constructor(
 ) {
     val user = userRepository.user
 
-    suspend operator fun invoke(word: String): Resource.Result<WordInfo, Throwable> {
+    suspend operator fun invoke(word: String): Result {
         val wordInfoAlreadySearched = user.wordsAlreadySearched.find { it.word == word }
 
         if (wordInfoAlreadySearched != null) {
-            return Resource.Result.Success(
+            return Result.Success(
                 data = wordInfoAlreadySearched,
             )
         }
 
+        if (user.currentSearchCount >= 10) {
+            return Result.Error(
+                isUserHasReachedFreeSearchLimit = true,
+            )
+        }
+
         return when (val response = repository.getWordInfo(word)) {
-            is Resource.Result.Error -> response
+            is Resource.Result.Error -> {
+                Result.Error(
+                    isUserHasReachedFreeSearchLimit = false,
+                )
+            }
 
             is Resource.Result.Success -> {
                 val wordId = if (user.wordsAlreadySearched.isEmpty()) 1 else
@@ -32,7 +42,7 @@ class GetWordInfoUseCase @Inject constructor(
                     id = wordId,
                 )
 
-                Resource.Result.Success(
+                Result.Success(
                     data = wordInfo,
                 )
             }
@@ -40,3 +50,7 @@ class GetWordInfoUseCase @Inject constructor(
     }
 }
 
+sealed interface Result {
+    data class Success(val data: WordInfo) : Result
+    data class Error(val isUserHasReachedFreeSearchLimit: Boolean) : Result
+}
