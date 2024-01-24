@@ -155,7 +155,7 @@ fun WordInfoScreen(
                     }
 
                     Text(
-                        text = word.phonetics.first().text,
+                        text = word.phonetics.first { it.text.isNotEmpty() }.text,
                         modifier = Modifier
                             .padding(start = dimensions.semiMedium)
                             .align(Alignment.CenterVertically),
@@ -251,7 +251,7 @@ fun WordMeanings(
                                 color = Gray
                             )
                         ) {
-                            append("[${meaning.partOfSpeech}]")
+                            append("[${meaning.partOfSpeech.lowercase()}]")
                         }
                         withStyle(
                             SpanStyle(
@@ -270,7 +270,7 @@ fun WordMeanings(
                         modifier = Modifier.padding(
                             bottom = dimensions.medium
                         ),
-                        text = "• ${definition.example}",
+                        text = "• ${definition.example.lowercase()}",
                         style = Typography.bodySmall,
                         color = DarkBlue,
                     )
