@@ -18,7 +18,12 @@ DictionMaster is designed to be a user-friendly English dictionary app that seam
 - **Cache Implementation:** Efficiently manage repeated searches by implementing a search cache, reducing the need for redundant REST requests to the Free Dictionary API.
 
 ## Screenshots
-![Captura de tela de 2024-01-25 14-48-31](https://github.com/snvinni/DictionMaster/assets/89394446/465965e2-5877-416c-b1f8-f1ab8705d41e)![Captura de tela de 2024-01-25 14-48-35](https://github.com/snvinni/DictionMaster/assets/89394446/8c5f5dc8-4bb4-4b3c-b041-529ffcbb3ba9)![image](https://github.com/snvinni/DictionMaster/assets/89394446/71f07ebc-7689-4f04-9293-ebc9ad48be07)![Captura de tela de 2024-01-25 14-48-49](https://github.com/snvinni/DictionMaster/assets/89394446/d66cbc6b-4e48-4284-8d82-5eee0593479c)![image](https://github.com/snvinni/DictionMaster/assets/89394446/6ca9f8b0-775f-41bd-9104-3f87140b9370)
+![image](https://github.com/snvinni/DictionMaster/assets/89394446/4e6793e3-4857-440e-abbc-dfad0498989e) ![image](https://github.com/snvinni/DictionMaster/assets/89394446/cb2b893d-ccbe-4368-a33f-7a3f9cdfe7eb) ![image](https://github.com/snvinni/DictionMaster/assets/89394446/3a57be77-8ba1-4817-a805-1deb060e7ca3) ![image](https://github.com/snvinni/DictionMaster/assets/89394446/c574012e-ee9b-4ed9-92f9-c5579cec5204) ![image](https://github.com/snvinni/DictionMaster/assets/89394446/7d57d261-02f9-41f3-846a-83c7def09d4e)
+
+
+
+
+
 
 ## Technologies Used
 - **Data Store:** Utilize Data Store for efficient data storage and retrieval.
