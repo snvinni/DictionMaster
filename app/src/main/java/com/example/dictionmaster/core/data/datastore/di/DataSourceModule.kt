@@ -14,7 +14,6 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 internal object DataSourceModule {
-
     @Module
     @InstallIn(SingletonComponent::class)
     internal object Provide {

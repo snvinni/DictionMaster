@@ -1,5 +1,6 @@
 package com.example.dictionmaster.core.domain.usecase
 
+import com.example.dictionmaster.Constants
 import com.example.dictionmaster.core.domain.model.Word
 import com.example.dictionmaster.core.domain.repository.UserRepository
 import com.example.dictionmaster.core.domain.repository.WordRepository
@@ -21,7 +22,7 @@ class GetWordInfoUseCase @Inject constructor(
             )
         }
 
-        if (user.currentSearchCount > 10) {
+        if (user.currentSearchCount > Constants.DAILY_LIMIT_OF_SEARCHES) {
             return Result.Error(
                 isUserHasReachedFreeSearchLimit = true,
             )

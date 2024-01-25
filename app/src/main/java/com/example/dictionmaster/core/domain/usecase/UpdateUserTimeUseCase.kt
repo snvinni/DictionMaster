@@ -1,6 +1,7 @@
 package com.example.dictionmaster.core.domain.usecase
 
 import com.example.dictionmaster.core.domain.repository.UserRepository
+import com.example.dictionmaster.Constants
 import javax.inject.Inject
 
 class UpdateUserTimeUseCase @Inject constructor(
@@ -9,7 +10,8 @@ class UpdateUserTimeUseCase @Inject constructor(
     private val user by userRepository::user
     suspend operator fun invoke() {
         val currentUserTimeInMillis = user.firstRequestTimeInMillis
-        val currentDayInMillis = System.currentTimeMillis() / 86400000 * 86400000
+        val currentDayInMillis = System.currentTimeMillis() /
+                Constants.DAY_IN_MILLIS * Constants.DAY_IN_MILLIS
         val hasDayChanged = currentUserTimeInMillis < currentDayInMillis
 
         if (!hasDayChanged) return
@@ -20,5 +22,5 @@ class UpdateUserTimeUseCase @Inject constructor(
                 firstRequestTimeInMillis = System.currentTimeMillis()
             )
         }
-   }
+    }
 }
